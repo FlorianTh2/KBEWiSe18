@@ -42,11 +42,6 @@ public class AppTest
 		assert app.reportName.equals("report.txt");
 	}
 	
-	
-	// tests: readFile, erkennen aller @RunMe, 
-	@Test
-	public void test() {}
-	
 	@Test(expected = CommandLine.MissingParameterException.class)
 	public void testShouldRejectMissingOptions()
 	{
