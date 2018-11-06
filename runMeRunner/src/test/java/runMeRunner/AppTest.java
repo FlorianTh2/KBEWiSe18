@@ -2,6 +2,11 @@ package runMeRunner;
 
 import static org.junit.Assert.*;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +16,22 @@ import picocli.CommandLine.Model.CommandSpec;
 public class AppTest
 {
 	App app;
+	
+	public static class Invokable
+	{
+		@RunMe
+		public void methodA()
+		{
+			int a = 1 + 1;
+		}
+		
+		@RunMe
+		public void methodB()
+		{
+			int b = 2 + 2;
+		}
+	}
+	
 	
 	@Before
 	public void setUp() throws Exception
@@ -78,5 +99,47 @@ public class AppTest
 	{
 		String[] args = {"-o", "testreport"};
 		new CommandLine(app).parse(args);
+	}
+	
+	@Test
+	public void testShouldInvokeMethod()
+	{
+		Class<?> invokable;
+		
+		try
+		{
+			invokable = Invokable.class;
+			assert app.invoke(invokable, invokable.getMethod("methodA"));
+		} catch (NoSuchMethodException e) {
+			assert false;
+		}
+	}
+	
+	@Test
+	public void testShouldNotInvokeMethod()
+	{
+		Class<?> invokable;
+		
+		invokable = Invokable.class;
+		assert !app.invoke(invokable, null);
+	}
+	
+	@Test
+	public void testShouldCreateReportMap()
+	{
+		Class<?> invokable;
+		
+		invokable = Invokable.class;
+		HashMap<Integer, ArrayList<Method>> map = app.report(invokable);
+		assert map != null;
+		assert map.size() == 3;
+		assert map.get(1).size() == 2;
+	}
+	
+	@Test
+	public void testShouldLoad() {
+		String[] args = {"-c", "runMeRunner.TestAnnotationClass", "-o", "testreport"};
+		new CommandLine(app).parse(args);
+		assertNotNull(app.load()); 	
 	}
 }
