@@ -15,6 +15,36 @@ import picocli.CommandLine.Option;
 @Command(name="runMeRunner", footer="Version 1.0 2018")
 public class App implements Runnable
 {
+	static class InvokeResult
+	{
+		public boolean success;
+		public String methodName;
+		public String exceptionName;
+		
+		public InvokeResult(boolean success, String methodName, String exceptionName)
+		{
+			this.success = success;
+			this.methodName = methodName;
+			this.exceptionName = exceptionName;
+		}
+		
+		public static InvokeResult success(Method method)
+		{
+			return new InvokeResult(true, method.getName(), null);
+		}
+		
+		public static InvokeResult failure(Method method, Exception exception)
+		{
+			return new InvokeResult(false, method.getName(), exception.getClass().getName());
+		}
+		
+		public static InvokeResult ignore(Method method)
+		{
+			return new InvokeResult(false, method.getName(), null);
+		}
+	}
+	
+	
 	@Option(names = {"-h", "--help"}, usageHelp = true)
 	boolean help;
 	
@@ -59,33 +89,32 @@ public class App implements Runnable
 		}
 	}
 	
-	boolean invoke(Class<?> custom, Method method)
+	InvokeResult invoke(Class<?> custom, Method method)
 	{
-		if(custom == null || method == null)
-			return false;
-		
 		try
 		{
 			Object obj = custom.newInstance();
 			method.setAccessible(true);
 			method.invoke(obj);
-			return true;
-		}catch (InvocationTargetException a) {
-			return false;
+			return InvokeResult.success(method);
+		} catch (InvocationTargetException e) {
+			return InvokeResult.failure(method, e);
 		} catch (InstantiationException e) {
-			return false;
+			return InvokeResult.failure(method, e);
 		} catch (IllegalAccessException e) {
-			return false;
+			return InvokeResult.failure(method, e);
+		} catch (IllegalArgumentException e) {
+			return InvokeResult.failure(method, e);
 		}
 	}
 	
-	HashMap<Integer, ArrayList<Method>> report(Class<?> custom)
+	HashMap<Integer, ArrayList<InvokeResult>> report(Class<?> custom)
 	{
 		Method[] methods = custom.getDeclaredMethods();
-		HashMap<Integer, ArrayList<Method>> map = new HashMap<Integer, ArrayList<Method>>();
+		HashMap<Integer, ArrayList<InvokeResult>> map = new HashMap<Integer, ArrayList<InvokeResult>>();
 		
 		for(int i = 0; i < channels; ++i)
-			map.put(i, new ArrayList<Method>());
+			map.put(i, new ArrayList<InvokeResult>());
 		
 		for(Method method : methods)
 		{
@@ -94,19 +123,20 @@ public class App implements Runnable
 			
 			if(runme == null)
 			{
-				map.get(0).add(method);
+				map.get(0).add(InvokeResult.ignore(method));
 			} else {
-				map.get(1).add(method);
+				map.get(1).add(InvokeResult.ignore(method));
 				
-				if(invoke(custom, method))
-					map.get(2).add(method);
+				InvokeResult result = invoke(custom, method);
+				if(!result.success)
+					map.get(2).add(result);
 			}
 		}
 		
 		return map;
 	}
 	
-	private void write(HashMap<Integer, ArrayList<Method>> map)
+	private void write(HashMap<Integer, ArrayList<InvokeResult>> map)
 	{
 		File file = new File(reportName);
 		FileWriter fileWriter = null;
@@ -134,16 +164,16 @@ public class App implements Runnable
 			buffered = new BufferedWriter(fileWriter);
 			
 			buffered.write("Methods without RunMe:\n");
-			for(Method method : map.get(0))
-				buffered.write("\t" + method.getName() + "\n");
+			for(InvokeResult result : map.get(0))
+				buffered.write("\t" + result.methodName + "\n");
 			
 			buffered.write("Methods with RunMe:\n");
-			for(Method method : map.get(1))
-				buffered.write("\t" + method.getName() + "\n");
+			for(InvokeResult result : map.get(1))
+				buffered.write("\t" + result.methodName + "\n");
 			
 			buffered.write("Not invokable Methods:\n");
-			for(Method method : map.get(2))
-				buffered.write("\t" + method.getName() + "\n");
+			for(InvokeResult result : map.get(2))
+				buffered.write("\t" + result.methodName + ":" + result.exceptionName + "\n");
 			
 			buffered.flush();
 		} catch (IOException e) {

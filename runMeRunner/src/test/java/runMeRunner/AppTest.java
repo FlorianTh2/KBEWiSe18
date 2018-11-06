@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Model.CommandSpec;
+import runMeRunner.App.InvokeResult;
 
 public class AppTest
 {
@@ -29,6 +30,12 @@ public class AppTest
 		public void methodB()
 		{
 			int b = 2 + 2;
+		}
+		
+		@RunMe
+		public void methodC()
+		{
+			int c = 3 + 3;
 		}
 	}
 	
@@ -109,7 +116,7 @@ public class AppTest
 		try
 		{
 			invokable = Invokable.class;
-			assert app.invoke(invokable, invokable.getMethod("methodA"));
+			assert app.invoke(invokable, invokable.getMethod("methodA")).success;
 		} catch (NoSuchMethodException e) {
 			assert false;
 		}
@@ -120,8 +127,13 @@ public class AppTest
 	{
 		Class<?> invokable;
 		
-		invokable = Invokable.class;
-		assert !app.invoke(invokable, null);
+		try
+		{
+			invokable = App.class;
+			assert !app.invoke(invokable, Invokable.class.getMethod("methodC")).success;
+		} catch (NoSuchMethodException e) {
+			assert false;
+		}
 	}
 	
 	@Test
@@ -130,10 +142,10 @@ public class AppTest
 		Class<?> invokable;
 		
 		invokable = Invokable.class;
-		HashMap<Integer, ArrayList<Method>> map = app.report(invokable);
+		HashMap<Integer, ArrayList<InvokeResult>> map = app.report(invokable);
 		assert map != null;
 		assert map.size() == 3;
-		assert map.get(1).size() == 2;
+		assert map.get(1).size() == 3;
 	}
 	
 	@Test
