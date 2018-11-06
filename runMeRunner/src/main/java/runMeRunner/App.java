@@ -23,6 +23,8 @@ public class App implements Runnable
 
 	@Option(names = {"-o", "--output"}, arity="1", required = false, description = "Name of output report file")
 	String reportName;
+	
+	private int channels = 3;
 
 	public static void main(String[] args)
 	{
@@ -38,11 +40,14 @@ public class App implements Runnable
 		System.out.println("Report: " + reportName);
 		
 		Class<?> loaded = load();
-		if(loaded != null)
-			report(loaded);
+		
+		if(loaded == null)
+			return;
+		
+		write(report(loaded));
 	}
 	
-	private Class<?> load()
+	Class<?> load()
 	{
 		try
 		{
@@ -54,10 +59,33 @@ public class App implements Runnable
 		}
 	}
 	
-	private void report(Class<?> custom)
+	boolean invoke(Class<?> custom, Method method)
 	{
-		Method[] methods = custom.getMethods();
+		if(custom == null || method == null)
+			return false;
+		
+		try
+		{
+			Object obj = custom.newInstance();
+			method.setAccessible(true);
+			method.invoke(obj);
+			return true;
+		}catch (InvocationTargetException a) {
+			return false;
+		} catch (InstantiationException e) {
+			return false;
+		} catch (IllegalAccessException e) {
+			return false;
+		}
+	}
+	
+	HashMap<Integer, ArrayList<Method>> report(Class<?> custom)
+	{
+		Method[] methods = custom.getDeclaredMethods();
 		HashMap<Integer, ArrayList<Method>> map = new HashMap<Integer, ArrayList<Method>>();
+		
+		for(int i = 0; i < channels; ++i)
+			map.put(i, new ArrayList<Method>());
 		
 		for(Method method : methods)
 		{
@@ -75,23 +103,7 @@ public class App implements Runnable
 			}
 		}
 		
-		write(map);
-	}
-	
-	private boolean invoke(Class<?> custom, Method method)
-	{
-		try
-		{
-			Object obj = custom.newInstance();
-			method.invoke(obj, method);
-			return true;
-		}catch (InvocationTargetException a) {
-			return false;
-		} catch (InstantiationException e) {
-			return false;
-		} catch (IllegalAccessException e) {
-			return false;
-		}
+		return map;
 	}
 	
 	private void write(HashMap<Integer, ArrayList<Method>> map)
@@ -109,7 +121,7 @@ public class App implements Runnable
 					fileWriter = new FileWriter(file);
 				 
 			}
-		}catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -136,14 +148,13 @@ public class App implements Runnable
 			buffered.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		finally {
-				if(buffered != null)
-					try {
-						buffered.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+		} finally {
+			if(buffered != null)
+				try {
+					buffered.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			
 		}
 	}
