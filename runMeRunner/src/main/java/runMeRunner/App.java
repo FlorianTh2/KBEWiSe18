@@ -4,12 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -87,7 +85,11 @@ public class App implements Runnable
 			Object obj = custom.newInstance();
 			method.invoke(obj, method);
 			return true;
-		} catch(Exception e) {
+		}catch (InvocationTargetException a) {
+			return false;
+		} catch (InstantiationException e) {
+			return false;
+		} catch (IllegalAccessException e) {
 			return false;
 		}
 	}
@@ -97,18 +99,20 @@ public class App implements Runnable
 		File file = new File(reportName);
 		FileWriter fileWriter = null;
 		
-		try
-		{
+		try {
 			if(file.exists())
 			{
-				fileWriter = new FileWriter(file, false);
+					fileWriter = new FileWriter(file, false);
 			} else {
-				file.createNewFile();
-				fileWriter = new FileWriter(file);
+					file.createNewFile();
+
+					fileWriter = new FileWriter(file);
+				 
 			}
-		} catch(Exception e) {
-			System.out.println("File cannot be created.");
+		}catch (IOException e) {
+			e.printStackTrace();
 		}
+		
 
 			
 		BufferedWriter buffered = null;
@@ -130,15 +134,17 @@ public class App implements Runnable
 				buffered.write("\t" + method.getName() + "\n");
 			
 			buffered.flush();
-		} catch (Exception e) {
-			System.out.println("Cannot write to File.");
-		} finally {
-			try {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
 				if(buffered != null)
-					buffered.close();
-			} catch (Exception e) {
-				System.out.println("Cannot close File.");
-			}
+					try {
+						buffered.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			
 		}
 	}
 }
