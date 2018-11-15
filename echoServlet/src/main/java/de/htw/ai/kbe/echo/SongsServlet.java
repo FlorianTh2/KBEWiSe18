@@ -44,7 +44,21 @@ public class SongsServlet extends HttpServlet {
 		}
 		response.setContentType("text/plain");
 		try (PrintWriter out = response.getWriter()) {
-			responseStr += "\n Your request will be sent to khkhkjkjkjkkjkjkj" + uriToDB;
+			responseStr += "\n Your request will be sent to " + uriToDB;
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			out.println(responseStr);
 		}
 	}
@@ -56,6 +70,14 @@ public class SongsServlet extends HttpServlet {
 		byte[] inBytes = IOUtils.toByteArray(inputStream);
 		try (PrintWriter out = response.getWriter()) {
 			out.println(new String(inBytes));
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 	}
 	
