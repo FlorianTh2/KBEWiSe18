@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-public class EchoServlet extends HttpServlet {
+public class SongsServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class EchoServlet extends HttpServlet {
 		}
 		response.setContentType("text/plain");
 		try (PrintWriter out = response.getWriter()) {
-			responseStr += "\n Your request will be sent to " + uriToDB;
+			responseStr += "\n Your request will be sent to khkhkjkjkjkkjkjkj" + uriToDB;
 			out.println(responseStr);
 		}
 	}

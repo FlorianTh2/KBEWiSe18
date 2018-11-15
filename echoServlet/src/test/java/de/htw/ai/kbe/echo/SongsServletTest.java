@@ -13,11 +13,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 
-import de.htw.ai.kbe.echo.EchoServlet;
+import de.htw.ai.kbe.echo.SongsServlet;
 
-public class EchoServletTest {
+public class SongsServletTest {
 	
-    private EchoServlet servlet;
+    private SongsServlet servlet;
     private MockServletConfig config;
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
@@ -26,7 +26,7 @@ public class EchoServletTest {
     
     @Before
     public void setUp() throws ServletException {
-        servlet = new EchoServlet();
+        servlet = new SongsServlet();
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
         config = new MockServletConfig();
