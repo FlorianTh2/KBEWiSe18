@@ -1,0 +1,21 @@
+songs.json irgendwo lokal auf rechner aber nicht in webapps folger, weil überschrieben wird, wenn man neue songs irgendwie macht
+wenn man server neu startet, sind die songs dann mit drin
+
+Auf Datenbank muss "richtig" zugegriffen werden damit thread safe
+
+
+Testen: die gegebenen Methoden mit verschiedenen Szenarien (zwar nur 3 Methoden aber viele Testfälle für diese)
+
+für post muss man contenttype nicht testen
+
+schlechter payload = bad request
+
+für wollen nie eine 500 rausschicken -> 500 = wir haben Exception die wir nicht abfangen
+
+wenn er song 5 mal postet, dann haben wir song 5x in datenbank
+
+
+alles okay = 201
+
+
+
