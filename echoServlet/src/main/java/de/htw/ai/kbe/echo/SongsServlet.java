@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.commons.io.IOUtils;
 
 public class SongsServlet extends HttpServlet {
@@ -85,3 +88,24 @@ public class SongsServlet extends HttpServlet {
 		return this.uriToDB;
 	}
 }
+
+
+
+
+//
+//// Reads a list of songs from a JSON-file into List<Song>
+//@SuppressWarnings("unchecked")
+//static List<OurSong> readJSONToSongs(String filename) throws FileNotFoundException, IOException {
+//	ObjectMapper objectMapper = new ObjectMapper();
+//	try (InputStream is = new BufferedInputStream(new FileInputStream(filename))) {
+//		return (List<OurSong>) objectMapper.readValue(is, new TypeReference<List<OurSong>>(){});
+//	}
+//}
+//
+//// Write a List<Song> to a JSON-file
+//static void writeSongsToJSON(List<OurSong> songs, String filename) throws FileNotFoundException, IOException {
+//	ObjectMapper objectMapper = new ObjectMapper();
+//	try (OutputStream os = new BufferedOutputStream(new FileOutputStream(filename))) {
+//		objectMapper.writeValue(os, songs);
+//	}
+//}
