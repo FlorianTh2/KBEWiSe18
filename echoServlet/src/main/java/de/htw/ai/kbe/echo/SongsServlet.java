@@ -37,13 +37,13 @@ public class SongsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static SongDatabase db;
 	private static String uriToDB;
-	
-	
+
+
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
 	    // Beispiel: Laden eines Konfigurationsparameters aus der web.xml
 		this.uriToDB = servletConfig.getInitParameter("uriToDBComponent");
-		
+
 		if(isValidDBURI(this.uriToDB))
 		{
 			db = SongDatabase.loadFromFile(uriToDB);
@@ -52,27 +52,27 @@ public class SongsServlet extends HttpServlet {
 			db = new SongDatabase();
 		}
 	}
-	
+
 	public boolean isValidDBURI(String uri)
 	{
 		if(uri == null)
 			return false;
-		
+
 		File file = new File(uri);
-		
+
 		if(!file.exists() || file.isDirectory())
 			return false;
 		return true;
 	}
 
 	@Override
-	public void doGet(HttpServletRequest request, 
+	public void doGet(HttpServletRequest request,
 	        HttpServletResponse response) throws IOException
 	{
 		if(!isValidHeaderGET(request)) {
 		    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
-		
+
 		// alle Parameter (keys)
 		Enumeration<String> paramNames = request.getParameterNames();
 
@@ -80,12 +80,12 @@ public class SongsServlet extends HttpServlet {
 
 		StringBuilder builder = new StringBuilder();
 		boolean single = false;
-		
-			
+
+
 		while (paramNames.hasMoreElements())
 		{
 			String param = paramNames.nextElement();
-			
+
 			switch(param)
 			{
 				case "all":
@@ -96,29 +96,40 @@ public class SongsServlet extends HttpServlet {
 				case "songId":
 					if(single)
 						break;
-					
+
 					String[] paramValues = request.getParameterValues(param);
-					
+
 					if(paramValues == null)
 						break;
-					
+
 					int[] paramParsed = new int[paramValues.length];
-					
+
 					for(int i = 0; i < paramValues.length; ++i)
-						paramParsed[i] = Integer.parseInt(paramValues[i]);
-					
+					{
+						try
+						{
+							paramParsed[i] = Integer.parseInt(paramValues[i]);
+						} catch(NumberFormatException e)
+						{
+							response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+							return;
+						}
+
+					}
+
+
 					String query = db.queryToJson(paramParsed);
-					
+
 					if(query != null)
 						builder.append(query);
 					else
 					    response.sendError(HttpServletResponse.SC_NOT_FOUND);
 					break;
 			}
-			
+
 		}
-		
-		
+
+
 		try (PrintWriter out = response.getWriter())
 		{
 			out.print(builder);
@@ -127,28 +138,28 @@ public class SongsServlet extends HttpServlet {
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
-	{	
+	{
 		StringBuilder builder = new StringBuilder();
 		BufferedReader reader = request.getReader();
-		
+
 		String line;
 		while((line = reader.readLine()) != null)
 			builder.append(line);
-		
+
 		Song song = Song.fromJson(builder.toString());
-		
+
 		if(song == null)
 		{
 			response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
 		} else if(song.valid()) {
 			db.add(song);
-			response.setHeader("Location", "http://localhost:8080/songsServlet?songId=" + song.getId().toString());		
+			response.setHeader("Location", "http://localhost:8080/songsServlet?songId=" + song.getId().toString());
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		}
-		
+
 	}
-	
+
 	@Override
 	public void destroy()
 	{
@@ -159,22 +170,17 @@ public class SongsServlet extends HttpServlet {
 	protected String getUriToDB () {
 		return this.uriToDB;
 	}
-	
-	
+
+
 	public boolean isValidHeaderGET(HttpServletRequest request)
 	{
 		String acceptHeader = request.getHeader("Accept");
-		
+
 		if(acceptHeader == null)
 			return true;
-		
+
 		if(acceptHeader.equals("*") || acceptHeader.equals("application/json"))
 			return true;
 		return false;
 	}
 }
-
-
-
-
-

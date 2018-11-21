@@ -8,7 +8,7 @@
         <servlet-class>de.htw.ai.kbe.echo.SongsServlet</servlet-class>
         <init-param>
             <param-name>uriToDBComponent</param-name>
-            <param-value>/home/florian/Desktop/KBE/dataForBeleg2Servlet/songs.json</param-value>
+            <param-value>/home/s0559090/eclipse-workspace/songs.json</param-value>
         </init-param>
     </servlet>
 
