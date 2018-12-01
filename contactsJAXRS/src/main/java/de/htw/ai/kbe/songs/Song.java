@@ -6,7 +6,6 @@ public class Song
 	public String artist;
 	public String album;
 	public Integer released;
-	public Integer id;
 	
 	public Song()
 	{
@@ -15,16 +14,14 @@ public class Song
 		this.artist = null;
 		this.album = null;
 		this.released = null;
-		this.id = null;
 	}
 	
-	public Song(String title, String artist, String album, Integer released, Integer id)
+	public Song(String title, String artist, String album, Integer released)
 	{
 		super();
 		this.title = title;
 		this.artist = artist;
 		this.album = album;
 		this.released = released;
-		this.id = id;
 	}
 }

@@ -4,22 +4,43 @@ import java.util.List;
 
 public abstract class Entry<V>
 {
-	private int id;
+	private Integer id;
 	private V value;
+	
+	public Entry()
+	{
+		super();
+		this.id = null;
+		this.value = null;
+	}
 	
 	public Entry(V value)
 	{
+		super();
+		this.id = null;
 		this.value = value;
+	}
+	
+	public Entry(int id, V value)
+	{
+		super();
+		this.id = new Integer(id);
+		this.value = value;
+	}
+	
+	public boolean hasId()
+	{
+		return this.id != null && this.id.intValue() >= 0;
 	}
 	
 	public int getId()
 	{
-		return this.id;
+		return this.id.intValue();
 	}
 	
 	public void setId(int id)
 	{
-		this.id = id;
+		this.id = new Integer(id);
 	}
 	
 	public V retrieve()
