@@ -21,9 +21,16 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 	public void insert(Entry<Song> entry)
 	{
 		if(entry.hasId() || data.containsKey(entry.getId()))
-			entry.setId(nextId());
+		{
+			int id = 0;
 			
-		this.data.put(entry.getId(), entry);
+			while(this.data.keySet().contains(Integer.valueOf(id)))
+				++id;
+			
+			entry.setId(id);
+		}
+		
+		this.data.put(Integer.valueOf(entry.getId()), entry);
 	}
 
 	@Override
@@ -38,7 +45,7 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 		if(value == null)
 			return;
 		
-		Entry<Song> entry = new SongEntry(nextId(), value);
+		Entry<Song> entry = new SongEntry(value);
 		this.insert(entry);
 	}
 
@@ -137,15 +144,5 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 		
 		for(Entry<Song> entry : list)
 			insert(entry);
-	}
-	
-	private int nextId()
-	{
-		int id = 0;
-		
-		while(this.data.keySet().contains(Integer.valueOf(id)))
-			++id;
-		
-		return id;
 	}
 }
