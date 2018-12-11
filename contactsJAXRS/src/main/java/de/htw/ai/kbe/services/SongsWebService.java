@@ -1,3 +1,5 @@
+//         String tmp = Long.toHexString(Double.doubleToLongBits(Math.random()));
+
 package de.htw.ai.kbe.services;
 
 import java.util.Collection;
@@ -26,7 +28,7 @@ public class SongsWebService {
 	private IDatabase db; 
 
 	@Inject
-	public SongsWebService(IDatabase db) {
+	public SongsWebService(IDatabase db, UriInfo uriInfo) {
 		super();
 		this.db = db;
 		//db.add(new Song("title1","artist1","album1",new Integer(1992)));
@@ -49,7 +51,7 @@ public class SongsWebService {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Song getContact(@PathParam("id") Integer id) {
-		Song song = (Song)db.get(id);
+		Song song = (Song) db.get(id);
 		if (song != null) {
 			System.out.println("getContact: Returning contact for id " + id);
 			return song;  //Response.ok(contact).build();
@@ -64,7 +66,7 @@ public class SongsWebService {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces(MediaType.TEXT_PLAIN)
-	public Response createContact(Song song) {
+	public Response createSong(Song song) {
 	     db.add(song);
 	     //return Response.ok().entity(newId).build();
 	     UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
