@@ -93,7 +93,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>songsjersey</finalName>
+		<finalName>songsRX</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -111,5 +111,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<artifactId>songsjersey</artifactId>
+	<artifactId>songsRX</artifactId>
 </project>
