@@ -11,4 +11,16 @@ public class UserDatabase implements IDatabaseUser{
 		return null;
 	}
 
+	@Override
+	public void addUser() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public IUser exists(IUser user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
