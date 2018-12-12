@@ -20,7 +20,7 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 	@Override
 	public void insert(Entry<Song> entry)
 	{
-		if(entry.hasId() || data.containsKey(entry.getId()))
+		if(!entry.hasId() || data.containsKey(entry.getId()))
 		{
 			int id = 0;
 			
@@ -37,6 +37,13 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 	public Entry<Song> retrieve(int id)
 	{
 		return this.data.get(Integer.valueOf(id));
+	}
+	
+	@Override
+	public void replace(Entry<Song> entryOld, Entry<Song> entryNew)
+	{
+		if(entryOld.hasId() && data.containsKey(entryOld.getId()))
+			this.data.replace(Integer.valueOf(entryOld.getId()), entryNew);
 	}
 	
 	@Override
@@ -76,6 +83,12 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 		
 		return entry.retrieve();
 	}
+	
+	@Override
+	public void update(int id, Song value)
+	{
+		replace(retrieve(id), new SongEntry(id, value));
+	}
 
 	@Override
 	public int size()
@@ -92,11 +105,14 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 	@Override
 	public List<Song> values()
 	{
+		System.out.println("check2");
+
 		List<Song> list = new ArrayList<>();
 		
 		for(Entry<Song> entry : this.data.values())
 			list.add(entry.retrieve());
-		
+		System.out.println("check3");
+
 		return list;
 	}
 

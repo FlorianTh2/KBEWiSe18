@@ -2,7 +2,7 @@ package de.htw.ai.kbe.db;
 
 import java.util.List;
 
-public abstract class Entry<V>
+public abstract class Entry<V extends IValue>
 {
 	private Integer id;
 	private V value;
@@ -24,8 +24,9 @@ public abstract class Entry<V>
 	public Entry(int id, V value)
 	{
 		super();
-		this.id = new Integer(id);
+		this.id = Integer.valueOf(id);
 		this.value = value;
+		mergeId();
 	}
 	
 	public boolean hasId()
@@ -40,17 +41,26 @@ public abstract class Entry<V>
 	
 	public void setId(int id)
 	{
-		this.id = new Integer(id);
+		this.id = Integer.valueOf(id);
+		mergeId();
 	}
 	
 	public V retrieve()
 	{
-		return this.value;
+		return mergeId();
 	}
 	
 	public void store(V value)
 	{
-		this.value = value;
+		this.value = mergeId();
+	}
+	
+	
+	private V mergeId()
+	{
+		if(hasId())
+			this.value.setId(this.id.intValue());
+		return this.value;
 	}
 	
 	public abstract String toJson();

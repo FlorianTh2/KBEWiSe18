@@ -1,11 +1,17 @@
 package de.htw.ai.kbe.songs;
 
-public class Song
+import javax.xml.bind.annotation.XmlRootElement;
+
+import de.htw.ai.kbe.db.IValue;
+
+@XmlRootElement(name = "song")
+public class Song implements IValue
 {
 	public String title;
 	public String artist;
 	public String album;
 	public Integer released;
+	public Integer id;
 	
 	public Song()
 	{
@@ -14,6 +20,7 @@ public class Song
 		this.artist = null;
 		this.album = null;
 		this.released = null;
+		this.id = null;
 	}
 	
 	public Song(String title, String artist, String album, Integer released)
@@ -23,5 +30,30 @@ public class Song
 		this.artist = artist;
 		this.album = album;
 		this.released = released;
+		this.id = null;
+	}
+	
+	public Song(String title, String artist, String album, Integer released, Integer id)
+	{
+		super();
+		this.title = title;
+		this.artist = artist;
+		this.album = album;
+		this.released = released;
+		this.id = id;
+	}
+
+	@Override
+	public int getId()
+	{
+		if(this.id == null)
+			return -1;
+		return this.id.intValue();
+	}
+
+	@Override
+	public void setId(int id)
+	{
+		this.id = Integer.valueOf(id);
 	}
 }

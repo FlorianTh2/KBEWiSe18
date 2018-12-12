@@ -2,14 +2,18 @@ package de.htw.ai.kbe.db;
 
 import java.util.List;
 
-public interface IDatabase<T extends Entry<V>, V>
+import de.htw.ai.kbe.songs.Song;
+
+public interface IDatabase<T extends Entry<V>, V extends IValue>
 {
 	void insert(Entry<V> entry);
 	Entry<V> retrieve(int id);
+	void replace(Entry<Song> entryOld, Entry<Song> entryNew);
 	void add(V value);
 	V get(int id);
 	void delete(int id);
 	V remove(int id);
+	void update(int id, V value);
 	int size();
 	void clear();
 	List<V> values();
