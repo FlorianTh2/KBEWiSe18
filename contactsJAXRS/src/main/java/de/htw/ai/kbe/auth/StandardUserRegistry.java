@@ -1,4 +1,4 @@
-package de.htw.ai.kbe.user;
+package de.htw.ai.kbe.auth;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-import de.htw.ai.kbe.db.IUserRegistry;
+import de.htw.ai.kbe.user.IUserRegistry;
 
 public class StandardUserRegistry implements IUserRegistry<StandardUser>
 {

@@ -47,6 +47,12 @@ public class SongDatabase implements IDatabase<SongEntry, Song>
 	}
 	
 	@Override
+	public boolean exists(int id)
+	{
+		return retrieve(Integer.valueOf(id)) != null;
+	}
+	
+	@Override
 	public void add(Song value)
 	{
 		if(value == null)

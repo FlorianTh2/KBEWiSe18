@@ -89,7 +89,7 @@ public class SongEntry extends Entry<Song>
 			List<Entry<Song>> entries = new ArrayList<>();
 			
 			for(Song value : list)
-				entries.add(new SongEntry(value));
+				entries.add(new SongEntry(value.getId(), value));
 			
 			return entries;
 		} catch (IOException e) {
@@ -159,7 +159,7 @@ public class SongEntry extends Entry<Song>
 			List<Entry<Song>> entries = new ArrayList<>();
 			
 			for(Song value : list)
-				entries.add(new SongEntry(value));
+				entries.add(new SongEntry(value.getId(), value));
 			
 			return entries;
 		} catch (IOException e) {

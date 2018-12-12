@@ -1,4 +1,4 @@
-package de.htw.ai.kbe.db;
+package de.htw.ai.kbe.user;
 
 import java.util.List;
 

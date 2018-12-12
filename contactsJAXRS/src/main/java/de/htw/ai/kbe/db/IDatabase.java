@@ -9,6 +9,7 @@ public interface IDatabase<T extends Entry<V>, V extends IValue>
 	void insert(Entry<V> entry);
 	Entry<V> retrieve(int id);
 	void replace(Entry<Song> entryOld, Entry<Song> entryNew);
+	boolean exists(int id);
 	void add(V value);
 	V get(int id);
 	void delete(int id);

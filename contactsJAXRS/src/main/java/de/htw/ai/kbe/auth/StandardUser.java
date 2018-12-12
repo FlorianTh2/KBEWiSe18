@@ -1,4 +1,4 @@
-package de.htw.ai.kbe.user;
+package de.htw.ai.kbe.auth;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.htw.ai.kbe.db.User;
+import de.htw.ai.kbe.user.User;
 
 public class StandardUser extends User
 {

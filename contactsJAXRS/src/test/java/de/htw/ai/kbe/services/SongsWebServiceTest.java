@@ -1,85 +1,130 @@
 package de.htw.ai.kbe.services;
+import static org.junit.Assert.*;
 
-public class SongsWebServiceTest {
+import javax.inject.Singleton;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 
+import org.glassfish.hk2.api.TypeLiteral;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import de.htw.ai.kbe.auth.AuthorizationFilter;
+import de.htw.ai.kbe.auth.StandardUser;
+import de.htw.ai.kbe.auth.StandardUserRegistry;
+import de.htw.ai.kbe.db.IDatabase;
+import de.htw.ai.kbe.di.DependencyBinder;
+import de.htw.ai.kbe.exceptions.UnhandledExceptionFilter;
+import de.htw.ai.kbe.songs.Song;
+import de.htw.ai.kbe.songs.SongDatabase;
+import de.htw.ai.kbe.songs.SongEntry;
+import de.htw.ai.kbe.songs.SongFileDatabase;
+import de.htw.ai.kbe.user.IUserRegistry;
+
+public class SongsWebServiceTest extends JerseyTest
+{
+	public static class DependencyBinderTest extends AbstractBinder
+	{
+		@Override
+		protected void configure()
+		{
+			SongFileDatabase.defaultPath = "src/test/java/de/htw/ai/kbe/services/songsOld.json";
+			StandardUserRegistry.defaultPath = "src/test/java/de/htw/ai/kbe/services/user.json";
+			
+			if(SongFileDatabase.defaultPathAvailable())
+				bind(SongFileDatabase.class).to(new TypeLiteral<IDatabase<SongEntry, Song>>(){}).in(Singleton.class);
+			else
+				bind(SongDatabase.class).to(new TypeLiteral<IDatabase<SongEntry, Song>>(){}).in(Singleton.class);
+				
+			bind(StandardUserRegistry.class).to(new TypeLiteral<IUserRegistry<StandardUser>>(){}).in(Singleton.class);
+		}
+	}
+
+	public static class ApplicationTest extends ResourceConfig
+	{
+		public ApplicationTest()
+		{
+			register(new DependencyBinderTest());
+			register(AuthorizationFilter.class);
+	        register(UnhandledExceptionFilter.class);
+			packages("de.htw.ai.kbe.services");
+		}
+	}
+	
+	private String token;
+	
+	@Override
+	protected Application configure()
+	{
+		return new ApplicationTest();
+	}
+	
+	@Before
+	public void setUpToken() throws Exception
+	{ 
+		Response response = target("/auth").queryParam("userId", "eschuler").request().get();
+		token = response.readEntity(String.class);
+	}
+	
+	@Test
+	public void databaseShouldBeLoaded()
+	{
+		Response response = target("/songs/1").request().header("Authorization", token).get();
+		assertEquals(200, response.getStatus());
+		response = target("/songs/10").request().header("Authorization", token).get();
+		assertEquals(200, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithJsonShouldBeValid()
+	{
+		Song s = new Song("Test Title", "Test Artist", "Test Album", Integer.valueOf(2000), 1);
+		Response response = target("/songs/1").request().header("Authorization", token).put(Entity.json(s));
+		assertEquals(204, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithXmlShouldBeValid()
+	{
+		Song s = new Song("Test Title", "Test Artist", "Test Album", Integer.valueOf(2000), 1);
+		Response response = target("/songs/1").request().header("Authorization", token).put(Entity.xml(s));
+		assertEquals(204, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutPayloadShouldBeInvalid()
+	{
+		Song s = new Song();
+		Response response = target("/songs/1").request().header("Authorization", token).put(Entity.json(s));
+		assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutExistingIdShouldBeInvalid()
+	{
+		Song s = new Song("Test Title", "Test Artist", "Test Album", Integer.valueOf(2000), 999);
+		Response response = target("/songs/999").request().header("Authorization", token).put(Entity.json(s));
+		assertEquals(404, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutValidIdShouldBeInvalid()
+	{
+		Song s = new Song("Test Title", "Test Artist", "Test Album", Integer.valueOf(2000));
+		Response response = target("/songs/test").request().header("Authorization", token).put(Entity.json(s));
+		assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutMatchingIdBeInvalid()
+	{
+		Song s = new Song("Test Title", "Test Artist", "Test Album", Integer.valueOf(2000), 2);
+		Response response = target("/songs/1").request().header("Authorization", token).put(Entity.json(s));
+		assertEquals(400, response.getStatus());
+	}
 }
-
-
-
-
-
-
-
-
-
-//package de.htw.ai.kbe.services;
-//
-//import org.glassfish.hk2.utilities.binding.AbstractBinder;
-//import org.glassfish.jersey.server.ResourceConfig;
-//import org.glassfish.jersey.test.JerseyTest;
-//import org.junit.Assert;
-//import org.junit.Test;
-//
-//import de.htw.ai.kbe.bean.Contact;
-//import de.htw.ai.kbe.services.ContactsWebService;
-//import de.htw.ai.kbe.storage.IAddressBook;
-//import de.htw.ai.kbe.storage.InMemoryAddressBook;
-//
-//import javax.ws.rs.client.Entity;
-//import javax.ws.rs.core.Application;
-//import javax.ws.rs.core.MediaType;
-//import javax.ws.rs.core.Response;
-//
-//public class ContactsWebServiceTest extends JerseyTest {
-//
-//	@Override
-//    protected Application configure() {
-//    	//die Konfiguration mit der entsprechenden Webservice Klasse
-//        return new ResourceConfig(ContactsWebService.class).register(
-//	        new AbstractBinder() {
-//	        	@Override
-//	        	protected void configure() {
-//	        		bind(InMemoryAddressBook.class).to(IAddressBook.class);
-//	        	}
-//	        });
-//     }
-//
-//	@Test
-//	public void getContactDefaultContentTypeShouldBeXML() {
-//		String response = target("/contacts/1").request().get(String.class);
-//		System.out.println(response);
-//		Assert.assertTrue(response.startsWith("<?xml"));
-//	}
-//
-//	@Test
-//	public void getContactWithValidIdShouldReturnContact() {
-//		Contact contact = target("/contacts/1").request(MediaType.APPLICATION_JSON).get(Contact.class);
-//		System.out.println(contact);
-//		Assert.assertEquals(1, contact.getId().intValue());
-//	}
-//
-//	@Test
-//	public void getContactWithNonExistingIdShouldReturn204() {
-//		Response response = target("/contacts/22").request().get();
-//		Assert.assertEquals(204, response.getStatus());
-//	}
-//
-//	@Test
-//	public void getContactWithStringIdShouldReturn404() {
-//		Response response = target("/contacts/ksksksk").request().get();
-//		Assert.assertEquals(404, response.getStatus());
-//	}
-//
-//	@Test
-//	public void createContactShouldReturn201AndID() {
-//		Contact bob = new Contact();
-//		bob.setFirstName("Bob");
-//		bob.setLastName("MUELLER");
-//		bob.setMobile("+4917687654321");
-//		Response response = target("/contacts").request().post(Entity.xml(bob));
-//		Assert.assertEquals(201, response.getStatus());
-//		// Assert.assertEquals("3", response.readEntity(String.class));
-//		Assert.assertTrue(response.getLocation().toString().endsWith("3"));
-//	}
-//
-//}

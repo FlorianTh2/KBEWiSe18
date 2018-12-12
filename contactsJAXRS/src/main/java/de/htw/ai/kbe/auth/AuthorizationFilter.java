@@ -11,31 +11,30 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import de.htw.ai.kbe.db.IUserRegistry;
-import de.htw.ai.kbe.user.StandardUser;
+import de.htw.ai.kbe.user.IUserRegistry;
 
 
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class OwnRequestFilter implements ContainerRequestFilter {
+public class AuthorizationFilter implements ContainerRequestFilter {
     
 	private IUserRegistry<StandardUser> registry; 
 	
 	
 	@Inject
-	public OwnRequestFilter(IUserRegistry<StandardUser> registry)
+	public AuthorizationFilter(IUserRegistry<StandardUser> registry)
 	{
-		System.out.println("hasdhfjahsdfhasdfgasdfghassdfghfasdgfgasdgdfgafsdgsdfghasdsdfgf");
 		this.registry = registry;
 	}
 	
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) throws IOException
+    {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader == null) {
+        
+        if (authorizationHeader == null)
         	requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
-        }
         
         String token = authorizationHeader;
         

@@ -12,6 +12,6 @@ public class UnhandledExceptionFilter extends Throwable implements ExceptionMapp
     @Override
     public Response toResponse(Throwable exception)
     {
-        return Response.status(500).entity("Something bad happened. Please try again !!").type("text/plain").build();
+        return Response.status(400).entity("Something went wrong, please check the header and payload of youre request.").build();
     }
 }

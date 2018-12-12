@@ -17,9 +17,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import de.htw.ai.kbe.*;
+import de.htw.ai.kbe.auth.StandardUser;
 import de.htw.ai.kbe.db.IDatabase;
-import de.htw.ai.kbe.db.IUserRegistry;
-import de.htw.ai.kbe.user.StandardUser;
+import de.htw.ai.kbe.user.IUserRegistry;
 
 @Path("/auth")
 public class AuthenticationWebService {
