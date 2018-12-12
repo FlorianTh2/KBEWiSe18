@@ -7,11 +7,11 @@ import de.htw.ai.kbe.db.IValue;
 @XmlRootElement(name = "song")
 public class Song implements IValue
 {
-	public String title;
-	public String artist;
-	public String album;
-	public Integer released;
-	public Integer id;
+	private String title;
+	private String artist;
+	private String album;
+	private Integer released;
+	private Integer id;
 	
 	public Song()
 	{
@@ -55,5 +55,41 @@ public class Song implements IValue
 	public void setId(int id)
 	{
 		this.id = Integer.valueOf(id);
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getArtist() {
+		return artist;
+	}
+
+	public void setArtist(String artist) {
+		this.artist = artist;
+	}
+
+	public String getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(String album) {
+		this.album = album;
+	}
+
+	public Integer getReleased() {
+		return released;
+	}
+
+	public void setReleased(Integer released) {
+		this.released = released;
 	}
 }

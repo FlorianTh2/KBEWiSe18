@@ -9,7 +9,6 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import de.htw.ai.kbe.db.IDatabase;
 import de.htw.ai.kbe.db.IDatabaseSessionToken;
 import de.htw.ai.kbe.db.IUserRegistry;
-import de.htw.ai.kbe.sessionToken.SessionTokenDatabase;
 import de.htw.ai.kbe.songs.Song;
 import de.htw.ai.kbe.songs.SongDatabase;
 import de.htw.ai.kbe.songs.SongEntry;

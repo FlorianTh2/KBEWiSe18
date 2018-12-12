@@ -6,7 +6,10 @@
 
 package de.htw.ai.kbe.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -39,23 +42,11 @@ public class SongsWebService {
 		super();
 		this.db = db;
 	}
-	
-	@Secured
-	@GET
-	@Path("/default")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String setDefaultSongs() {
-		db.add(new Song("title", "album", "artist", new Integer(2001)));
-		db.add(new Song("title 2", "album 2", "artist 2", new Integer(2002)));
-		return "YAAY your database contains some default values";
-	}
 
 	@Secured
 	@GET 
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Collection<Song> getAllSongs() {
-		System.out.println("check1");
-		System.out.println(db.values().toString());
 		return db.values();
 	}
 
@@ -85,9 +76,16 @@ public class SongsWebService {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Secured
 	public Response createSong(Song song) {
+		System.out.println(1);
 	     db.add(song);
+			System.out.println(2);
+
 	     UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+			System.out.println(3);
+
 	     uriBuilder.path(Integer.toString(song.getId()));
+			System.out.println(4);
+
 	     return Response.created(uriBuilder.build()).build();
 	}
     
@@ -118,12 +116,15 @@ public class SongsWebService {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteSong(@PathParam("id") Integer id) {
-		db.delete(id);
-		return Response.status(204).build();
+		if(db.get(id) != null) {
+			db.delete(id);
+			return Response.status(204).build();
+		}
+		return Response.status(404).entity("GIVEN SONG DOES NOT EXIST").build();
 	}
 	
 	private boolean songIsValid(Song song) {
-		if(song.title != null && db.get(song.getId()) != null)
+		if(song.getTitle() != null && db.get(song.getId()) != null)
 			return true;
 		return false;
 	}

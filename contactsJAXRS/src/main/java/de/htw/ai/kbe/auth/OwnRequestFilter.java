@@ -39,7 +39,7 @@ public class OwnRequestFilter implements ContainerRequestFilter {
         
         String token = authorizationHeader;
         
-        if(!registry.authorized(token))
+        if(token == null || !registry.authorized(token))
         	requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
     }
 }
