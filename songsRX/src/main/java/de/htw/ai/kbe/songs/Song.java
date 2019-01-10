@@ -15,7 +15,9 @@ import de.htw.ai.kbe.db.IValue;
 @XmlRootElement(name = "song")
 public class Song implements IValue
 {
+	@Column(name = "title")
 	private String title;
+	@Column(name = "artist")
 	private String artist;
 	
 	@Column(name = "album")
@@ -107,4 +109,8 @@ public class Song implements IValue
 	public void setReleased(Integer released) {
 		this.released = released;
 	}
+	
+	public String toString() {
+        return "id=" + this.id + " title=" + this.title + " artist=" + this.artist + " released=" + this.released;
+    }
 }

@@ -27,6 +27,12 @@ public abstract class User
 		this.userId = null;
 	}
 	
+	public User(String userId)
+	{
+		super();
+		this.userId = userId;
+	}
+	
 	public User(Integer id, String userId)
 	{
 		super();
