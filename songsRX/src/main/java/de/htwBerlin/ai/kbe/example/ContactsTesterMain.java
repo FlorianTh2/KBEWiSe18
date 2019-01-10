@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import de.htw.ai.kbe.songs.Song;
 
 public class ContactsTesterMain {
-	private static final String PERSISTENCE_UNIT_NAME = "songsdb";
+	private static final String PERSISTENCE_UNIT_NAME = "_s0559090__songsdb";
 
     public static void main(String[] args) {
         EntityManager em = null;
@@ -25,6 +25,7 @@ public class ContactsTesterMain {
             Song song1 = new Song("test1", "artistTest", "testAlbum", new Integer(2100));
             em.persist(song1);
             em.getTransaction().commit();
+            System.out.println(songFromDB);
         } catch (Exception ex) {
             em.getTransaction().rollback();
         } finally {

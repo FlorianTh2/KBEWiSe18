@@ -3,14 +3,23 @@ package de.htw.ai.kbe.auth;
 import java.io.IOException;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.htw.ai.kbe.user.User;
 
+@Table(name="user")
+@Entity
 public class StandardUser extends User
 {
+	@Column(name = "first_name")
 	private String firstName;
+	
+	@Column(name = "last_name")
 	private String lastName;
 	
 	public static List<StandardUser> allFromJson(String json)
