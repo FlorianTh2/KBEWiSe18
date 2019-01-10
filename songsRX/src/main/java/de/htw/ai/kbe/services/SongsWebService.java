@@ -99,21 +99,6 @@ public class SongsWebService
 		return Response.status(204).build();
     }
 	
-	@Secured
-	@DELETE
-	@Path("/{id}")
-	public Response deleteSong(@PathParam("id") Integer id)
-	{
-		if(id == null)
-			return ResponseException.build(400, ResponseException.INVALID_ID);
-			
-		Song song = db.remove(id.intValue());
-		
-		if(song == null)
-			return ResponseException.build(404, ResponseException.RESOURCE_NOT_FOUND);
-		
-		return Response.status(204).build();
-	}
 	
 	private boolean songIsValid(Song song)
 	{

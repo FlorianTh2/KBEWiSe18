@@ -1,3 +1,5 @@
+// SongDAO for in-memory-db
+
 package de.htw.ai.kbe.songs;
 
 import java.util.ArrayList;

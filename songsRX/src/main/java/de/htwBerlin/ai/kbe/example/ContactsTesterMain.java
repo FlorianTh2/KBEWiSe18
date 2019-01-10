@@ -20,12 +20,13 @@ public class ContactsTesterMain {
         try {
             // EntityManager bietet Zugriff auf Datenbank
             em = factory.createEntityManager();
-            Song songFromDB = em.find(Song.class, new Integer(1));            
+            Song songFromDB = em.find(Song.class, new Integer(1));
+            System.out.println("hier: " + songFromDB);
+
             em.getTransaction().begin();
             Song song1 = new Song("test1", "artistTest", "testAlbum", new Integer(2100));
             em.persist(song1);
             em.getTransaction().commit();
-            System.out.println(songFromDB);
         } catch (Exception ex) {
             em.getTransaction().rollback();
         } finally {

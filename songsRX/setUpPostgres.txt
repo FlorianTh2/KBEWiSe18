@@ -2,6 +2,7 @@ docker run --name postgres -e POSTGRES_USER=s0558101 -e POSTGRES_PASSWORD=docker
 danach kann man, sofern man psql installiert hat, von überall aus (also nicht nur innerhalb des Containers)
 	auf die Datenbank zugreifen:
 	psql -h localhost -U s0558101 -d s0558101 // -U = User -d = kann Datenbanken anlegen
+	psql -h db.f4.htw-berlin.de _s0559090__songsdb _s0559090__songsdb_generic
 falls man auf container zugreifen will
 	docker exec -it postgres bash
 
@@ -103,6 +104,12 @@ GRANT ALL PRIVILEGES ON TABLE song TO s0558101;
 GRANT ALL PRIVILEGES ON TABLE songlist TO s0558101;
 GRANT ALL PRIVILEGES ON TABLE songlist_song TO s0558101;
 
+SELECT setval('song_id_seq', 12, true);
+
+SELECT setval('songlist_id_seq', 3, true);
+
+SELECT setval('users_id_seq', 2, true);
+
 
 
 //
@@ -125,3 +132,10 @@ GRANT ALL PRIVILEGES ON TABLE users TO s0558101_songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE song TO s0558101_songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE songlist TO s0558101_songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE songlist_song TO s0558101_songsdb_generic;
+
+
+GRANT ALL PRIVILEGES ON TABLE song_id_seq TO _s0559090__songsdb_generic;
+GRANT ALL PRIVILEGES ON TABLE songlist_id_seq TO _s0559090__songsdb_generic;
+GRANT ALL PRIVILEGES ON TABLE users_id_seq TO _s0559090__songsdb_generic;
+
+

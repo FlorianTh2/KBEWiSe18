@@ -9,14 +9,13 @@
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" 
-                      value="jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0559090__songsdb"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0559090__songsdb"/>
             <property name="javax.persistence.jdbc.user" value="_s0559090__songsdb_generic"/>
             <property name="javax.persistence.jdbc.password" value="1234cola"/>
 <!--             Hibernate properties -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="false"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         </properties>
     </persistence-unit>
 </persistence>

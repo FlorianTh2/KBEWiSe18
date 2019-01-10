@@ -14,6 +14,7 @@ import de.htw.ai.kbe.songs.Song;
 import de.htw.ai.kbe.songs.SongDatabase;
 import de.htw.ai.kbe.songs.SongEntry;
 import de.htw.ai.kbe.songs.SongFileDatabase;
+import de.htw.ai.kbe.songs.SongPostgresDatabase;
 import de.htw.ai.kbe.user.IUserRegistry;
 
 public class DependencyBinder extends AbstractBinder {
@@ -23,10 +24,7 @@ public class DependencyBinder extends AbstractBinder {
 		SongFileDatabase.defaultPath = "/home/florian/Desktop/KBE/dataForBeleg2Servlet/songsOld.json";
 		StandardUserRegistry.defaultPath = "/home/florian/Desktop/KBE/dataForBeleg2Servlet/user.json";
 		
-		if(SongFileDatabase.defaultPathAvailable())
-			bind(SongFileDatabase.class).to(new TypeLiteral<IDatabase<SongEntry, Song>>(){}).in(Singleton.class);
-		else
-			bind(SongDatabase.class).to(new TypeLiteral<IDatabase<SongEntry, Song>>(){}).in(Singleton.class);
+		bind(SongPostgresDatabase.class).to(new TypeLiteral<IDatabase<SongEntry, Song>>(){}).in(Singleton.class);
 			
 		bind(StandardUserRegistry.class).to(new TypeLiteral<IUserRegistry<StandardUser>>(){}).in(Singleton.class);
 	}
