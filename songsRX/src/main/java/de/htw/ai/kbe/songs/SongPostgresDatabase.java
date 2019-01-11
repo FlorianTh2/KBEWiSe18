@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 import de.htw.ai.kbe.db.Entry;
 import de.htw.ai.kbe.db.IDatabase;
 
-public class SongPostgresDatabase implements IDatabase<SongEntry, Song>{
+public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
 
     private EntityManagerFactory emf;
 
