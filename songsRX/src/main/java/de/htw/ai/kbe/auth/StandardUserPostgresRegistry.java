@@ -18,13 +18,17 @@ public class StandardUserPostgresRegistry implements IUserRegistry<StandardUser>
 	public static String defaultPath;
 	
 	private EntityManagerFactory entityManagerFactory;
+
 	private ConcurrentHashMap<String, StandardUser> auth;
+
 	
 	@Inject
 	public StandardUserPostgresRegistry(EntityManagerFactory entityManagerFactory)
 	{
 		this.entityManagerFactory = entityManagerFactory;
+
 		this.auth = new ConcurrentHashMap<>();
+
 	}
 	
 	@Override
@@ -96,7 +100,9 @@ public class StandardUserPostgresRegistry implements IUserRegistry<StandardUser>
 		
 		try
 		{
+
 			TypedQuery<StandardUser> query = entityManager.createQuery("SELECT u FROM StandardUser u", StandardUser.class);
+
 			return query.getResultList();
 		} finally {
 			entityManager.close();
@@ -136,6 +142,7 @@ public class StandardUserPostgresRegistry implements IUserRegistry<StandardUser>
 	@Override
 	public StandardUser byUserId(String userId)
 	{
+
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		try
