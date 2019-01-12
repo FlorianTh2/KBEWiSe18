@@ -5,6 +5,8 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
         <class>de.htw.ai.kbe.songs.Song</class>
+        <class>de.htw.ai.kbe.auth.StandardUser</class>
+        <class>de.htw.ai.kbe.songs.SongList</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

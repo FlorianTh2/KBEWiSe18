@@ -17,7 +17,7 @@ public abstract class User
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "user_id")
+	@Column(name = "userid")
 	private String userId;
 	
 	public User()

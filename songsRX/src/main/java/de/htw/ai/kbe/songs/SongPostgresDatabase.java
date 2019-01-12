@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
 import de.htw.ai.kbe.db.Entry;
 import de.htw.ai.kbe.db.IDatabase;
 
-public class SongPostgresDatabase implements IDatabase<SongEntry, Song>{
+public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
 
     private EntityManagerFactory emf;
 
@@ -123,7 +123,7 @@ public class SongPostgresDatabase implements IDatabase<SongEntry, Song>{
 	public List<Song> values() {
 		 EntityManager em = emf.createEntityManager();
 	        try {
-	            TypedQuery<Song> query = em.createQuery("SELECT s FROM Contact s", Song.class);
+	            TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s", Song.class);
 	            return query.getResultList();
 	        } finally {
 	            em.close();

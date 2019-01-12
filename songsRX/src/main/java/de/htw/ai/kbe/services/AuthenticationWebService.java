@@ -19,14 +19,17 @@ import javax.ws.rs.core.UriInfo;
 import de.htw.ai.kbe.*;
 import de.htw.ai.kbe.auth.StandardUser;
 import de.htw.ai.kbe.db.IDatabase;
+import de.htw.ai.kbe.exceptions.ResponseException;
 import de.htw.ai.kbe.user.IUserRegistry;
 
 @Path("/auth")
-public class AuthenticationWebService {
+public class AuthenticationWebService
+{
 	private IUserRegistry<StandardUser> registry; 
 
 	@Inject
-	public AuthenticationWebService(IUserRegistry<StandardUser> registry, UriInfo uriInfo) {
+	public AuthenticationWebService(IUserRegistry<StandardUser> registry, UriInfo uriInfo)
+	{
 		super();
 		this.registry = registry;
 	}
@@ -40,6 +43,6 @@ public class AuthenticationWebService {
 		if(user != null)
         	return Response.ok().entity(registry.authorize(user.getId())).build();
 		else
-			return Response.status(403).entity("USERID DOES NOT EXISTS IN DATABASE" + "\n" + registry.users()).build();	
+			return ResponseException.build(403, ResponseException.ID_NOT_FOUND);
 	}	
 }

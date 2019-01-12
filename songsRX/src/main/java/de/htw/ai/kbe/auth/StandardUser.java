@@ -13,13 +13,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.htw.ai.kbe.user.User;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class StandardUser extends User
 {
-	@Column(name = "first_name")
+	@Column(name = "firstname")
 	private String firstName;
 	
-	@Column(name = "last_name")
+	@Column(name = "lastname")
 	private String lastName;
 	
 	public static List<StandardUser> allFromJson(String json)
@@ -61,6 +61,13 @@ public class StandardUser extends User
 	public StandardUser(String firstName, String lastName)
 	{
 		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
+	public StandardUser(String userId, String firstName, String lastName)
+	{
+		super(userId);
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}

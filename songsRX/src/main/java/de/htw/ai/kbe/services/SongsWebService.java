@@ -37,15 +37,17 @@ public class SongsWebService
 		super();
 		this.db = db;
 	}
+	
 
-	@Secured
+	//@Secured
 	@GET 
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Collection<Song> getAllSongs() {
+		System.out.println("hallo");
 		return db.values();
 	}
 
-	@Secured
+	//@Secured
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -63,13 +65,13 @@ public class SongsWebService
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces(MediaType.TEXT_PLAIN)
-	@Secured
+	//@Secured
 	public Response createSong(Song song)
 	{
 		if(!songIsValid(song))
 			return ResponseException.build(400, ResponseException.INVALID_PAYLOAD);
 		
-	     db.add(song);
+	     db.add(song); ////////////////// wir brauchen irgendwie die id zurück
 	     
 	     UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
 	     uriBuilder.path(Integer.toString(song.getId()));
@@ -77,7 +79,7 @@ public class SongsWebService
 	     return Response.created(uriBuilder.build()).build();
 	}
     
-	@Secured
+	//@Secured
 	@PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{id}")

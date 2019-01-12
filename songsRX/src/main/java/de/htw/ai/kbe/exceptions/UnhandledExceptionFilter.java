@@ -12,6 +12,6 @@ public class UnhandledExceptionFilter extends Throwable implements ExceptionMapp
     @Override
     public Response toResponse(Throwable exception)
     {
-        return Response.status(400).entity("Something went wrong, please check the header and payload of youre request.").build();
+    	return ResponseException.build(400, ResponseException.SOMETHING_WENT_WRONG);
     }
 }
