@@ -1,5 +1,6 @@
 package de.htw.ai.kbe.songs;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FetchType;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,16 +24,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TypedQuery;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import de.htw.ai.kbe.auth.StandardUser;
 import de.htw.ai.kbe.db.IValue;
 import de.htw.ai.kbe.user.User;
 
 
-
-
 @Table(name = "songlist")
 @Entity
+@XmlRootElement(name = "song_list")
 public class SongList implements IValue
 {
 	@Id
@@ -42,20 +45,19 @@ public class SongList implements IValue
 	private StandardUser ownerid;
 	
 	//@OneToMany(mappedBy = "songlist", cascade = CascadeType.ALL)
-	@ManyToMany(cascade = CascadeType.MERGE)
-	@JoinTable(name = "songlist_song",joinColumns = {@JoinColumn(name = "songlist_id", referencedColumnName = "id")},inverseJoinColumns = {@JoinColumn( name = "song_id", referencedColumnName = "id")})
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinTable(name = "songlist_song", joinColumns = @JoinColumn(name = "songlist_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn( name = "song_id", referencedColumnName = "id"))
 	private Set<Song> songs;
-	
+
 	@Column(name = "visibility")
-	// 0 =; 1=; 
 	private Integer visibility;
-	//owner_id ownerid_id
+
 	public SongList()
 	{
 		super();
-		this.id = 0;
+		this.id = null;
 		this.ownerid = null;
-		this.songs = null;
+		this.songs = new HashSet<Song>();
 		this.visibility = 0;
 	}
 	
@@ -117,5 +119,10 @@ public class SongList implements IValue
 	public void setVisibility(int visibility)
 	{
 		this.visibility = visibility;
+	}
+	
+	public Visibility visiblity()
+	{
+		return Visibility.values()[getVisibility()];
 	}
 }

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
@@ -138,21 +139,36 @@ public class StandardUserPostgresRegistry implements IUserRegistry<StandardUser>
 	{
 		return this.auth.containsKey(token);
 	}
+	
+	@Override
+	public boolean authorizedMatches(StandardUser user, String token)
+	{
+		return this.auth.get(token).getId() == user.getId();
+	}
 
+	@Override
+	public StandardUser authorizedWhoIs(String token)
+	{
+		return this.auth.get(token);
+	}
+	
 	@Override
 	public StandardUser byUserId(String userId)
 	{
-
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
 		try
 		{
-			TypedQuery<StandardUser> query = entityManager.createQuery("SELECT u FROM StandardUser u WHERE u.userId LIKE :userId", StandardUser.class);
+			TypedQuery<StandardUser> query = entityManager.createQuery("SELECT u FROM StandardUser u WHERE u.userId = :userId", StandardUser.class);
 			query.setParameter("userId", userId);
-					
+		
 			return query.getSingleResult();
+		} catch(NoResultException e) {
+			e.printStackTrace();
 		} finally {
 			entityManager.close();
 		}
+		
+		return null;
 	}
 }

@@ -15,9 +15,19 @@ import de.htw.ai.kbe.auth.StandardUser;
 import de.htw.ai.kbe.songs.Song;
 import de.htw.ai.kbe.songs.SongList;
 
-public class ContactsTesterMain {
+public class ContactsTesterMain
+{
 	private static final String PERSISTENCE_UNIT_NAME = "_s0559090__songsdb";
 
+	/*
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * ONLY FOR TESTING -> THIS IS NOT PART OF THE FINAL SOLUTION
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	 * */
+	
+	
     public static void main(String[] args) {
         EntityManager em = null;
         // Datei persistence.xml wird automatisch eingelesen, beim Start der Applikation
@@ -51,11 +61,18 @@ public class ContactsTesterMain {
         	StandardUser user = new StandardUser(new Integer(1),"mmuster","Maxime", "Muster");
 
         	em.getTransaction().begin();
-        	SongList songlist = new SongList(user,list, new Integer(123));
+        	SongList songlist = new SongList(user,list, new Integer(0));
             em.persist(songlist);
         	em.getTransaction().commit();
         	
+            EntityManager entityManager = factory.createEntityManager();
+            SongList songList = null;
+            System.out.println(songlist.getId()); // <------------------------------
+            songList = entityManager.find(SongList.class, new Integer(1));
+            for(Song s : songList.getSongs())
+            	System.out.println(s);
         	
+            
         } catch (Exception ex) {
         	System.out.println(ex.getMessage());
             em.getTransaction().rollback();
@@ -68,13 +85,3 @@ public class ContactsTesterMain {
         
     }
 }
-
-
-//Address address1 = new Address("Bobby Str 1", "JunoirCity", "56789", "Bobland", contact);
-//Address address2 = new Address("New Str 2", "SeniorCity", "12345", "Bobland", contact);
-//Set<Address> addressSet = new HashSet<>();
-//addressSet.add(address1);
-//addressSet.add(address2);
-//contact.setAddressSet(addressSet);
-// Wir persistieren nur contact,
-// wegen cascade=CascadeType.ALL werden auch address1, address 2 persistiert

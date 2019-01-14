@@ -13,8 +13,8 @@ public class MyApplication extends ResourceConfig
 	public MyApplication()
 	{
 		register(new DependencyBinder());
-		//register(AuthorizationFilter.class);
-        //register(UnhandledExceptionFilter.class);
+		register(AuthorizationFilter.class);
+        register(UnhandledExceptionFilter.class);
 		packages("de.htw.ai.kbe.services");
 	}
 }

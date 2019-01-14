@@ -115,6 +115,18 @@ public class StandardUserRegistry implements IUserRegistry<StandardUser>
 		return this.data.get(this.userIds.get(userId));
 	}
 	
+	@Override
+	public boolean authorizedMatches(StandardUser user, String token)
+	{
+		return this.auth.get(token).getId() == user.getId();
+	}
+	
+	@Override
+	public StandardUser authorizedWhoIs(String token)
+	{
+		return this.auth.get(token);
+	}
+	
 	private void load()
 	{
 		if(defaultPath == null)

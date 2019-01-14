@@ -1,6 +1,7 @@
 package de.htw.ai.kbe.songs;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -49,8 +50,10 @@ public class SongListPostgresDatabase implements IDatabase<SongListEntry, SongLi
 	@Override
 	public void add(SongList value)
 	{
+
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
+		
         try
         {
         	entityTransaction.begin();
@@ -72,7 +75,7 @@ public class SongListPostgresDatabase implements IDatabase<SongListEntry, SongLi
         
         try
         {
-        	songList = entityManager.find(SongList.class, id);
+        	songList = entityManager.find(SongList.class, Integer.valueOf(id));
         } finally {
         	entityManager.close();
         }
@@ -89,13 +92,20 @@ public class SongListPostgresDatabase implements IDatabase<SongListEntry, SongLi
 	@Override
 	public SongList remove(int id)
 	{
-		SongList songList = get(id);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
 		
+        SongList songList = null;
+        
         try
         {
         	entityTransaction.begin();
+        	
+        	songList = entityManager.find(SongList.class, Integer.valueOf(id));
+        	
+        	if(songList == null)
+        		return null;
+        		
         	entityManager.remove(songList);
             entityTransaction.commit();
         } catch (Exception e) {

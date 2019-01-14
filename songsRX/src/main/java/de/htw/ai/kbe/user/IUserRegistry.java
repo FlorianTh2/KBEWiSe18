@@ -12,5 +12,7 @@ public interface IUserRegistry<T extends User>
 	String authorize(int id);
 	void unauthorize(String id);
 	boolean authorized(String token);
+	boolean authorizedMatches(T user, String token);
+	T authorizedWhoIs(String token);
 	T byUserId(String userId);
 }

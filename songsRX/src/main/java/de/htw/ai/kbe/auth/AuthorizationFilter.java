@@ -17,10 +17,9 @@ import de.htw.ai.kbe.user.IUserRegistry;
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AuthorizationFilter implements ContainerRequestFilter {
-    
+public class AuthorizationFilter implements ContainerRequestFilter
+{
 	private IUserRegistry<StandardUser> registry; 
-	
 	
 	@Inject
 	public AuthorizationFilter(IUserRegistry<StandardUser> registry)

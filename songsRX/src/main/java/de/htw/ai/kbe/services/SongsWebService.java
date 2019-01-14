@@ -39,7 +39,7 @@ public class SongsWebService
 	}
 	
 
-	//@Secured
+	@Secured
 	@GET 
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Collection<Song> getAllSongs() {
@@ -47,7 +47,7 @@ public class SongsWebService
 		return db.values();
 	}
 
-	//@Secured
+	@Secured
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -65,7 +65,7 @@ public class SongsWebService
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces(MediaType.TEXT_PLAIN)
-	//@Secured
+	@Secured
 	public Response createSong(Song song)
 	{
 		if(!songIsValid(song))
@@ -79,7 +79,7 @@ public class SongsWebService
 	     return Response.created(uriBuilder.build()).build();
 	}
     
-	//@Secured
+	@Secured
 	@PUT
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{id}")
