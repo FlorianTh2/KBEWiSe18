@@ -33,7 +33,7 @@ import de.htw.ai.kbe.user.User;
 
 @Table(name = "songlist")
 @Entity
-@XmlRootElement(name = "song_list")
+@XmlRootElement(name = "songlist")
 public class SongList implements IValue
 {
 	@Id

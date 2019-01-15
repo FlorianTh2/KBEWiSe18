@@ -17,7 +17,7 @@ import de.htw.ai.kbe.songs.SongList;
 
 public class ContactsTesterMain
 {
-	private static final String PERSISTENCE_UNIT_NAME = "_s0559090__songsdb";
+	private static final String PERSISTENCE_UNIT_NAME = "_s0558101__songsdb";
 
 	/*
 	 * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

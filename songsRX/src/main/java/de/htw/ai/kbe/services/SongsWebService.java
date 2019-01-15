@@ -44,7 +44,7 @@ public class SongsWebService
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Collection<Song> getAllSongs() {
 		System.out.println("hallo");
-		return db.values();
+		return this.db.values();
 	}
 
 	@Secured
@@ -53,7 +53,7 @@ public class SongsWebService
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response getSong(@PathParam("id") Integer id)
 	{
-		Song song = db.get(id);
+		Song song = this.db.get(id);
 		
 		if (song == null)
 			return ResponseException.build(404, ResponseException.RESOURCE_NOT_FOUND);
@@ -71,7 +71,7 @@ public class SongsWebService
 		if(!songIsValid(song))
 			return ResponseException.build(400, ResponseException.INVALID_PAYLOAD);
 		
-	     db.add(song); ////////////////// wir brauchen irgendwie die id zurück
+	     this.db.add(song); ////////////////// wir brauchen irgendwie die id zurück
 	     
 	     UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
 	     uriBuilder.path(Integer.toString(song.getId()));
@@ -94,10 +94,10 @@ public class SongsWebService
 		if(id.intValue() != song.getId())
 			return ResponseException.build(400, ResponseException.RESOURCE_ID_NOT_PAYLOAD_ID);
 		
-		if(!db.exists(id.intValue()))
+		if(!this.db.exists(id.intValue()))
 			return ResponseException.build(404, ResponseException.RESOURCE_NOT_FOUND);
 		
-		db.update(id, song);
+		this.db.update(id, song);
 		return Response.status(204).build();
     }
 	

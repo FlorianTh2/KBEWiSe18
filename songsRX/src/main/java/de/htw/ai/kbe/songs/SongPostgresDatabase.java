@@ -17,22 +17,25 @@ import de.htw.ai.kbe.db.IDatabase;
 
 public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
 
-    private EntityManagerFactory emf;
+    private EntityManagerFactory entityManagerFactory;
 
     @Inject
-    public SongPostgresDatabase(EntityManagerFactory emf) {
-        this.emf = emf;
+    public SongPostgresDatabase(EntityManagerFactory entityManagerFactory)
+    {
+        this.entityManagerFactory = entityManagerFactory;
     }
 	
 	
 	@Override
-	public void insert(Entry<Song> entry) {
-		
+	public void insert(Entry<Song> entry)
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Entry<Song> retrieve(int id) {
-		return null;
+	public Entry<Song> retrieve(int id)
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -41,118 +44,154 @@ public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
 	}
 
 	@Override
-	public boolean exists(int id) {
-		return false;
+	public boolean exists(int id)
+	{
+		return get(id) != null;
 	}
 
 	@Override
 	public void add(Song value) {
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction transaction = em.getTransaction();
+        EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        
         try {
             transaction.begin();
             
-            em.persist(value);
-            transaction.commit(); // wir müssen wir irgendwie die id des values returnen
+            entityManager.persist(value);
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error adding song: " + e.getMessage());
             transaction.rollback();
             throw new PersistenceException("Could not persist entity: " + e.toString());
         } finally {
-            em.close();
+        	entityManager.close();
         }
 	}
 
 	@Override
 	public Song get(int id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager entityManager = this.entityManagerFactory.createEntityManager();
         Song entity = null;
         try {
-            entity = em.find(Song.class, id);
+            entity = entityManager.find(Song.class, id);
         } finally {
-            em.close();
+        	entityManager.close();
         }
         return entity;
     }
 
 	@Override
-	public void delete(int id) {
- 		
+	public void delete(int id)
+	{
+ 		remove(id);
 	}
 
 	@Override
 	public Song remove(int id) {
- 		return null;
+        EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+		
+        Song song = null;
+        
+        try
+        {
+        	entityTransaction.begin();
+        	
+        	song = entityManager.find(Song.class, Integer.valueOf(id));
+        	
+        	if(song == null)
+        		return null;
+        		
+        	entityManager.remove(song);
+            entityTransaction.commit();
+        } catch (Exception e) {
+        	entityTransaction.rollback();
+            e.printStackTrace();
+        } finally {
+        	entityManager.close();
+        }
+		
+		return song;
 	}
 
 	@Override
-	public void update(int id, Song value) {
-        EntityManager em = emf.createEntityManager();
+	public void update(int id, Song value)
+	{
+		if(id != value.getId())
+			return;
+		
+        EntityManager entityManager = this.entityManagerFactory.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        
         Song entity = null;
-        try {
-            entity = em.find(Song.class, id);
-    		if((entity.getId() == value.getId())) 
-    		{
-    			em.getTransaction().begin();
-    			entity.setTitle(value.getTitle());
-    			entity.setAlbum(value.getAlbum());
-    			entity.setArtist(value.getArtist());
-    			entity.setReleased(value.getReleased());
-    			em.getTransaction().commit();
-    		}
-    		
-
-            
+        try
+        {
+            entity = entityManager.find(Song.class, id);
+			entityTransaction.begin();
+			entity.setTitle(value.getTitle());
+			entity.setAlbum(value.getAlbum());
+			entity.setArtist(value.getArtist());
+			entity.setReleased(value.getReleased());
+			entityManager.persist(entity);
+			entityTransaction.commit();
         } finally {
-            em.close();
+        	entityManager.close();
         }
 	}
 
 	@Override
-	public int size() {
- 		return 0;
+	public int size() 
+	{
+ 		return values().size();
 	}
 
 	@Override
-	public void clear() {
- 		
+	public void clear()
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public List<Song> values() {
-		 EntityManager em = emf.createEntityManager();
-	        try {
-	            TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s", Song.class);
-	            return query.getResultList();
-	        } finally {
-	            em.close();
-	        }
-	    }
-
-	@Override
-	public List<Entry<Song>> entries() {
- 		return null;
+	public List<Song> values()
+	{
+		 EntityManager entityManager = entityManagerFactory.createEntityManager();
+	     try
+	     {
+	    	 TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s", Song.class);
+	         return query.getResultList();
+	     } finally {
+	    	 entityManager.close();
+	     }
 	}
 
 	@Override
-	public String toJson() {
- 		return null;
+	public List<Entry<Song>> entries()
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void fromJson(String json) {
- 		
+	public String toJson()
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public String toXml() {
- 		return null;
+	public void fromJson(String json)
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void fromXml(String xml) {
- 		
+	public String toXml()
+	{
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void fromXml(String xml)
+	{
+		throw new UnsupportedOperationException();
 	}
 
 }

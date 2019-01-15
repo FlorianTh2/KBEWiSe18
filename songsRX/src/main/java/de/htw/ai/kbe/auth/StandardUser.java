@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import de.htw.ai.kbe.user.User;
 
 @Entity
 @Table(name = "users")
+@XmlRootElement(name = "user")
 public class StandardUser extends User
 {
 	@Column(name = "firstname")

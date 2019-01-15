@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -66,7 +67,8 @@ public class SongListsWebService
 		
 		List<SongList> lists = listsOfUser(user, owner);
 		
-		return Response.ok(lists).build();
+		// since we return a list and xml cannot find root element for list
+		return Response.ok(new GenericEntity<List<SongList>>(lists) {}).build();
 	}
 	
 	@Secured
@@ -162,6 +164,9 @@ public class SongListsWebService
 		
 		for(SongList sl : lists)
 		{
+			if(sl.getOwner().getId() != user.getId())
+				continue;
+			
 			switch(sl.visiblity())
 			{
 				case Public:

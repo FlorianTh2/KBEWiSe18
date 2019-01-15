@@ -37,6 +37,6 @@ public class DependencyBinder extends AbstractBinder {
 		
 		bind(SongListPostgresDatabase.class).to(new TypeLiteral<IDatabase<SongListEntry, SongList>>(){}).in(Singleton.class);
 		
-        bind(Persistence.createEntityManagerFactory("_s0559090__songsdb")).to(EntityManagerFactory.class);
+        bind(Persistence.createEntityManagerFactory("_s0558101__songsdb")).to(EntityManagerFactory.class);
 	}
 }
