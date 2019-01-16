@@ -53,12 +53,13 @@ public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
 	public void add(Song value) {
         EntityManager entityManager = this.entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+        int id = 0;
         
         try {
             transaction.begin();
-            
             entityManager.persist(value);
             transaction.commit();
+            id = value.getId();
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
@@ -66,6 +67,8 @@ public class SongPostgresDatabase implements IDatabase<SongEntry, Song> {
         } finally {
         	entityManager.close();
         }
+        
+        value.setId(id);
 	}
 
 	@Override

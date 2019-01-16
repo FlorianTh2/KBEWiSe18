@@ -2,6 +2,7 @@ package de.htw.ai.kbe.services;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,7 @@ import de.htw.ai.kbe.songs.Visibility;
 import de.htw.ai.kbe.user.IUserRegistry;
 
 // 	http://localhost:8080/songsRX/rest/songLists
-@Path("/songList")
+@Path("/songLists")
 public class SongListsWebService
 {
 	private IDatabase<SongListEntry, SongList> db;
@@ -113,7 +114,7 @@ public class SongListsWebService
 		String token = headers.getHeaderString(HttpHeaders.AUTHORIZATION);
 		StandardUser user = this.registry.authorizedWhoIs(token);
 		
-		if(songList.getSongs() == null || !checkIfSongsExists(songList.getSongs()))
+		if(!checkIfSongsExists(songList.getSongs()))
 			return ResponseException.build(400, ResponseException.INVALID_PAYLOAD);
 		
 		
@@ -145,16 +146,15 @@ public class SongListsWebService
 		return Response.ok().build();
 	}
 	
-	private boolean checkIfSongsExists(Set<Song> listOfSong) 
+	private boolean checkIfSongsExists(Set<Song> songs) 
 	{
-		boolean exists = true;
-		for(Song song : listOfSong)
+		for(Song s : songs)
 		{
-            Song tmp = songdb.get(song.getId());
-            if(tmp == null)
-            	exists = false;
+			if(!this.songdb.exists(s.getId()))
+				return false;
 		}
-		return exists;
+		
+		return true;
 	}
 	
 	private List<SongList> listsOfUser(StandardUser user, boolean isOwner)
