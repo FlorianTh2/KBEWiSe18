@@ -113,24 +113,6 @@ SELECT setval('users_id_seq', 2, true);
 
 
 
-
-
-//
-ohne Rechtevergabe kann keiner Tables lesen außer der Ersteller, selbst wenn er nicht die db erstellt hat
-
-// Werte aus Tabelle getten (case sensitive)
-SELECT * FROM song;
-
-// verlassen
-\q
-
-
-// da nur 1 Benutzer in postgres vorhanden (s0558101) kennt er s0559090 und weitere nicht
-GRANT ALL PRIVILEGES ON TABLE users TO s0559090;
-GRANT ALL PRIVILEGES ON TABLE song TO s0559090;
-GRANT ALL PRIVILEGES ON TABLE songlist TO s0559090;
-GRANT ALL PRIVILEGES ON TABLE songlist_song TO s0559090;
-
 GRANT ALL PRIVILEGES ON TABLE users TO _s0558101__songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE song TO _s0558101__songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE songlist TO _s0558101__songsdb_generic;
@@ -141,4 +123,15 @@ GRANT ALL PRIVILEGES ON TABLE song_id_seq TO _s0558101__songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE songlist_id_seq TO _s0558101__songsdb_generic;
 GRANT ALL PRIVILEGES ON TABLE users_id_seq TO _s0558101__songsdb_generic;
 
+
+
+
+//
+ohne Rechtevergabe kann keiner Tables lesen außer der Ersteller, selbst wenn er nicht die db erstellt hat
+
+// Werte aus Tabelle getten (case sensitive)
+SELECT * FROM song;
+
+// verlassen
+\q
 
