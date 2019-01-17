@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<songlist>
+    <songs>
+        <album>Thank You</album>
+        <artist>Meghan Trainor, Kelli Trainor</artist>
+        <id>2</id>
+        <released>2016</released>
+        <title>Mom</title>
+    </songs>
+    <songs>
+        <album>Trolls</album>
+        <artist>Justin Timberlake</artist>
+        <id>1</id>
+        <released>2016</released>
+        <title>Can t Stop the Feeling</title>
+    </songs>
+    <songs>
+        <album>Thank You</album>
+        <artist>Meghan Trainor</artist>
+        <id>8</id>
+        <released>2016</released>
+        <title>No</title>
+    </songs>
+    <songs>
+        <album>Ghostbusters</album>
+        <artist>Fall Out Boy, Missy Elliott</artist>
+        <id>4</id>
+        <released>2016</released>
+        <title>Ghostbusters (I m not a fraid)</title>
+    </songs>
+    <visibility>1</visibility>
+</songlist>
