@@ -5,19 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.htw.ai.kbe.db.IValue;
 
-@Table(name="song")
 @Entity
+@Table(name = "song")
 @XmlRootElement(name = "song")
 public class Song implements IValue
 {
 	@Column(name = "title")
 	private String title;
-	
 	@Column(name = "artist")
 	private String artist;
 	
@@ -28,7 +28,7 @@ public class Song implements IValue
 	private Integer released;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
 	
 	public Song()
@@ -110,4 +110,8 @@ public class Song implements IValue
 	public void setReleased(Integer released) {
 		this.released = released;
 	}
+	
+	public String toString() {
+        return "id=" + this.id + " title=" + this.title + " artist=" + this.artist + " released=" + this.released;
+    }
 }

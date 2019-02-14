@@ -17,7 +17,7 @@ public abstract class User
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "user_id")
+	@Column(name = "userid")
 	private String userId;
 	
 	public User()
@@ -25,6 +25,12 @@ public abstract class User
 		super();
 		this.id = null;
 		this.userId = null;
+	}
+	
+	public User(String userId)
+	{
+		super();
+		this.userId = userId;
 	}
 	
 	public User(Integer id, String userId)
